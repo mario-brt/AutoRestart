@@ -1,0 +1,23 @@
+{
+  "plugin.loaded": "Plugin loaded successfully!",
+  "plugin.unloaded": "Plugin unloaded successfully!",
+  "plugin.using_timezone": "Using timezone: {0}",
+  "plugin.timezone_not_found": "Timezone '{0}' not found, using system default.",
+  "plugin.invalid_restart_time": "Invalid AutoRestartTime format: {0}. Expected format: HH:mm:ss",
+  
+  "restart.server_will_restart_at": "Server will restart at {0} {1} (in {2} hours)",
+  "restart.server_will_restart_in_minutes": "Server will restart in {0} minute{1}!",
+  "restart.server_will_restart_in_seconds": "Server will restart in {0} second{1}!",
+  "restart.server_restarting_now": "Server is restarting now!",
+  "restart.server_manually_restarted": "Server is being manually restarted by an admin!",
+  
+  "command.no_permission": "You don't have permission to use this command.",
+  "command.manual_restart_disabled": "Manual restart is disabled.",
+  "command.restart_executed": "Admin {0} executed restart command.",
+  "command.restarting_now": "Restarting server now...",
+  "command.auto_restart_disabled": "Auto restart is disabled.",
+  "command.invalid_restart_config": "Invalid restart time configuration.",
+  "command.next_restart": "Next restart: {0} {1} (in {2}h {3}m)",
+  
+  "log.no_admin_permission": "Player has no admin permission for restart."
+}

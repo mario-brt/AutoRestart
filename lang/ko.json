@@ -1,0 +1,23 @@
+{
+  "plugin.loaded": "플러그인이 성공적으로 로드되었습니다!",
+  "plugin.unloaded": "플러그인이 성공적으로 언로드되었습니다!",
+  "plugin.using_timezone": "시간대 사용: {0}",
+  "plugin.timezone_not_found": "시간대 '{0}'를 찾을 수 없습니다. 시스템 기본값을 사용합니다.",
+  "plugin.invalid_restart_time": "잘못된 AutoRestartTime 형식: {0}. 예상 형식: HH:mm:ss",
+  
+  "restart.server_will_restart_at": "서버가 {0} {1}에 재시작됩니다 ({2}시간 후)",
+  "restart.server_will_restart_in_minutes": "서버가 {0}분 후에 재시작됩니다!",
+  "restart.server_will_restart_in_seconds": "서버가 {0}초 후에 재시작됩니다!",
+  "restart.server_restarting_now": "서버를 지금 재시작합니다!",
+  "restart.server_manually_restarted": "관리자에 의해 서버가 수동으로 재시작됩니다!",
+  
+  "command.no_permission": "이 명령어를 사용할 권한이 없습니다.",
+  "command.manual_restart_disabled": "수동 재시작이 비활성화되어 있습니다.",
+  "command.restart_executed": "관리자 {0}이(가) 재시작 명령어를 실행했습니다.",
+  "command.restarting_now": "서버를 지금 재시작합니다...",
+  "command.auto_restart_disabled": "자동 재시작이 비활성화되어 있습니다.",
+  "command.invalid_restart_config": "잘못된 재시작 시간 설정입니다.",
+  "command.next_restart": "다음 재시작: {0} {1} ({2}시간 {3}분 후)",
+  
+  "log.no_admin_permission": "플레이어에게 재시작 관리자 권한이 없습니다."
+}

@@ -1,0 +1,12 @@
+{
+  "AutoRestartEnabled": true,
+  "EnableManualRestart": true,
+  "Flag": "@css/root",
+  "AutoRestartTime": "06:00:00",
+  "TimeZone": "Asia/Seoul",
+  "WarningTimes": [300, 180, 60, 30, 10, 5],
+  "EnableWarnings": true,
+  "Prefix": "[AutoRestart]",
+  "Language": "ko",
+  "ConfigVersion": 1
+}
