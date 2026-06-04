@@ -12,10 +12,11 @@ A Counter-Strike 2 server plugin that automatically restarts the server at a sch
 
 - ⏰ **Scheduled Restart** - Automatically restart server at a specific time daily
 - 🌏 **Timezone Support** - Configure any timezone (default: Asia/Seoul)
+- 🧠 **Smart Queue** - Delays restart until the server is empty (configurable)
 - 🚨 **Warning System** - Notify players before restart with customizable intervals
 - 🎮 **Manual Restart** - Admin command to restart immediately
 - 📊 **Status Check** - View next scheduled restart time
-- 🌍 **Multi-Language** - English and Korean support
+- 🌍 **Multi-Language** - English, German, and Korean support
 - ⚙️ **Custom Prefix** - Configurable message prefix
 
 ## 📦 Requirements
@@ -54,6 +55,7 @@ addons/counterstrikesharp/configs/plugins/AutoRestart/AutoRestart.json
 {
   "AutoRestartEnabled": true,
   "EnableManualRestart": true,
+  "WaitForEmptyServer": true,
   "Flag": "@css/root",
   "AutoRestartTime": "06:00:00",
   "TimeZone": "Asia/Seoul",
@@ -61,7 +63,8 @@ addons/counterstrikesharp/configs/plugins/AutoRestart/AutoRestart.json
   "EnableWarnings": true,
   "Prefix": "[AutoRestart]",
   "Language": "ko",
-  "ConfigVersion": 1
+  "ConfigVersion": 1,
+  "MaximumPlayers": 0
 }
 ```
 
@@ -73,6 +76,8 @@ addons/counterstrikesharp/configs/plugins/AutoRestart/AutoRestart.json
 | `AutoRestartEnabled` | bool | `true` | Enable automatic scheduled restart |
 | `EnableManualRestart` | bool | `true` | Allow manual restart command |
 | `Flag` | string | `"@css/root"` | Required permission flag for manual restart |
+| `WaitForEmptyServer` | bool | `true` | Delay scheduled restart if players are online |
+| `MaximumPlayers` | int | `0` | Restart triggers only if player count is at or below this limit |
 | **Schedule** |
 | `AutoRestartTime` | string | `"06:00:00"` | Daily restart time (HH:mm:ss format) |
 | `TimeZone` | string | `"Asia/Seoul"` | Timezone for restart schedule |
@@ -81,7 +86,7 @@ addons/counterstrikesharp/configs/plugins/AutoRestart/AutoRestart.json
 | `EnableWarnings` | bool | `true` | Enable restart warnings |
 | **Localization** |
 | `Prefix` | string | `"[AutoRestart]"` | Message prefix for all plugin messages |
-| `Language` | string | `"ko"` | Language setting (`"en"` or `"ko"`) |
+| `Language` | string | `"ko"` | Language setting (`"en"`, `"de"`, or `"ko"`) |
 
 **Apply changes:** `css_plugins reload AutoRestart`
 
@@ -119,6 +124,12 @@ dotnet build -c Release
 - Admin command with permission check
 - 2-second delay before server shutdown
 - Notifies all players before restart
+
+**Smart Queue System (New):**
+- If `WaitForEmptyServer` is true, the server won't shut down while players are active
+- Checks player count against the `MaximumPlayers` threshold
+- Warns active players that a restart is pending
+- Automatically shuts down the server once the player count drops to the limit
 
 ## 🤝 Contributing
 
