@@ -16,7 +16,7 @@ A Counter-Strike 2 server plugin that automatically restarts the server at a sch
 - 🚨 **Warning System** - Notify players before restart with customizable intervals
 - 🎮 **Manual Restart** - Admin command to restart immediately
 - 📊 **Status Check** - View next scheduled restart time
-- 🌍 **Multi-Language** - English, German, and Korean support
+- 🌍 **Multi-Language** - English and Korean support
 - ⚙️ **Custom Prefix** - Configurable message prefix
 
 ## 📦 Requirements
@@ -86,7 +86,7 @@ addons/counterstrikesharp/configs/plugins/AutoRestart/AutoRestart.json
 | `EnableWarnings` | bool | `true` | Enable restart warnings |
 | **Localization** |
 | `Prefix` | string | `"[AutoRestart]"` | Message prefix for all plugin messages |
-| `Language` | string | `"ko"` | Language setting (`"en"`, `"de"`, or `"ko"`) |
+| `Language` | string | `"ko"` | Language setting (`"en"` or `"ko"`) |
 
 **Apply changes:** `css_plugins reload AutoRestart`
 
