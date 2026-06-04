@@ -4,3 +4,4 @@ obj/
 
 # Release notes (keep in repo for tracking)
 RELEASE_NOTES.md
+/.vs

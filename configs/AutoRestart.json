@@ -1,12 +1,14 @@
 {
   "AutoRestartEnabled": true,
   "EnableManualRestart": true,
+  "WaitForEmptyServer": true,
   "Flag": "@css/root",
   "AutoRestartTime": "06:00:00",
-  "TimeZone": "Asia/Seoul",
-  "WarningTimes": [300, 180, 60, 30, 10, 5],
+  "TimeZone": "Europe/Berlin",
+  "WarningTimes": [ 300, 180, 60, 30, 10, 5 ],
   "EnableWarnings": true,
   "Prefix": "[AutoRestart]",
-  "Language": "ko",
-  "ConfigVersion": 1
+  "Language": "en",
+  "ConfigVersion": 1,
+  "MaximumPlayers": 0
 }

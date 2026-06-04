@@ -20,6 +20,9 @@ public class AutoRestartConfig : BasePluginConfig
     [JsonPropertyName("EnableManualRestart")]
     public bool EnableManualRestart { get; set; } = true;
 
+    [JsonPropertyName("WaitForEmptyServer")]
+    public bool WaitForEmptyServer { get; set; } = true;
+
     [JsonPropertyName("Flag")]
     public string Flag { get; set; } = "@css/root";
 
@@ -39,7 +42,10 @@ public class AutoRestartConfig : BasePluginConfig
     public string Prefix { get; set; } = "[AutoRestart]";
 
     [JsonPropertyName("Language")]
-    public string Language { get; set; } = "ko";
+    public string Language { get; set; } = "en";
+
+    [JsonPropertyName("MaximumPlayers")]
+    public int maxPlayers { get; set; } = 0;
 }
 
 public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
@@ -51,9 +57,11 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
     public required AutoRestartConfig Config { get; set; }
     private static IStringLocalizer? _localizer;
     private CounterStrikeSharp.API.Modules.Timers.Timer? _restartTimer;
+    private CounterStrikeSharp.API.Modules.Timers.Timer? _pendingRestartTimer;
     private readonly List<CounterStrikeSharp.API.Modules.Timers.Timer> _warningTimers = new();
     private TimeZoneInfo? _timeZone;
     private Dictionary<string, string> _translations = new();
+    
 
     public void OnConfigParsed(AutoRestartConfig config)
     {
@@ -93,12 +101,14 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
     {
         // Clean up timers
         _restartTimer?.Kill();
+        _pendingRestartTimer?.Kill(); 
+
         foreach (var timer in _warningTimers)
         {
             timer?.Kill();
         }
         _warningTimers.Clear();
-        
+
         Console.WriteLine(GetLocalizedMessage("plugin.unloaded"));
     }
 
@@ -204,7 +214,8 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
         }
 
         // Schedule restart timer
-        _restartTimer = AddTimer((float)delay.TotalSeconds, RestartServer);
+        // Schedule restart timer
+        _restartTimer = AddTimer((float)delay.TotalSeconds, () => RestartServer(false));
     }
 
     private void ScheduleWarnings(TimeSpan totalDelay)
@@ -240,16 +251,37 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
         Server.PrintToChatAll($" {ChatColors.Red}{message}");
     }
 
-    private void RestartServer()
+    private void RestartServer(bool force)
     {
-        Console.WriteLine(GetLocalizedMessage("restart.server_restarting_now"));
-        Server.PrintToChatAll($" {ChatColors.Red}{GetLocalizedMessage("restart.server_restarting_now")}");
-        
-        // Shut down server after short delay
-        AddTimer(2.0f, () =>
+        if (IsServerEmpty() || force || !Config.WaitForEmptyServer)
         {
-            Server.ExecuteCommand("quit");
-        });
+            Console.WriteLine(GetLocalizedMessage("restart.server_restarting_now"));
+            Server.PrintToChatAll($" {ChatColors.Red}{GetLocalizedMessage("restart.server_restarting_now")}");
+
+            // Shut down server after short delay
+            AddTimer(2.0f, () =>
+            {
+                Server.ExecuteCommand("quit");
+            });
+        }
+        else
+        {
+            if (_pendingRestartTimer == null)
+            {
+                Console.WriteLine(GetLocalizedMessage("restart.delayed_console"));
+                Server.PrintToChatAll($" {ChatColors.Yellow}{GetLocalizedMessageWithoutPrefix("restart.delayed_chat")}");
+
+                _pendingRestartTimer = AddTimer(10.0f, () =>
+                {
+                    if (IsServerEmpty())
+                    {
+                        _pendingRestartTimer?.Kill();
+                        _pendingRestartTimer = null;
+                        RestartServer(false);
+                    }
+                }, TimerFlags.REPEAT);
+            }
+        }
     }
 
     private void RestartCommand(CCSPlayerController? player, CommandInfo commandInfo)
@@ -281,7 +313,7 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
         }
         
         Server.PrintToChatAll($" {ChatColors.Red}{GetLocalizedMessage("restart.server_manually_restarted")}");
-        RestartServer();
+        RestartServer(true);
     }
 
     private void RestartStatusCommand(CCSPlayerController? player, CommandInfo commandInfo)
@@ -326,5 +358,18 @@ public class AutoRestart : BasePlugin, IPluginConfig<AutoRestartConfig>
         {
             Console.WriteLine(message);
         }
+    }
+    private bool IsServerEmpty()
+    {
+        
+        int playerCount = Utilities.GetPlayers().Count(p =>
+            p != null &&
+            p.IsValid &&
+            !p.IsBot &&
+            !p.IsHLTV &&
+            p.Connected == PlayerConnectedState.PlayerConnected
+        );
+        
+        return playerCount <= Config.maxPlayers;
     }
 }
